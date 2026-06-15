@@ -32,4 +32,9 @@ public class PasienService {
     public ObservableList<Pasien> search(String keyword) {
         return pasienDAO.searchPasien(keyword);
     }
+
+    // Tambahkan method ini di dalam class PasienService
+    public int getTotalPasien() {
+        return pasienDAO.getTotalPasien();
+    }
 }

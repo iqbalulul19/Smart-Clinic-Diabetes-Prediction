@@ -14,14 +14,14 @@ public class PasienDAO {
             ResultSet rs =st.executeQuery("SELECT * FROM pasien");
             while(rs.next()){
                 list.add(new Pasien(
-                        rs.getInt("id_pasien"),
+                        rs.getInt("id"),
                         rs.getString("nama"),
                         rs.getInt("umur"),
                         rs.getString("gender"),
                         rs.getString("alamat"),
-                        rs.getString("no_hp"),
-                        rs.getDouble("tekanan_darah"),
-                        rs.getDouble("gula_darah")
+                        rs.getString("noHP"),
+                        rs.getDouble("tekananDarah"),
+                        rs.getDouble("gulaDarah")
                         )
                 );
             }
@@ -34,7 +34,7 @@ public class PasienDAO {
     // INSERT
     public void insertPasien(Pasien p){
         try{
-    String sql ="INSERT INTO pasien(nama,umur,gender,alamat,no_hp,tekanan_darah,gula_darah) VALUES(?,?,?,?,?,?,?)";
+    String sql ="INSERT INTO pasien(nama,umur,gender,alamat,noHP,tekananDarah,gulaDarah) VALUES(?,?,?,?,?,?,?)";
             PreparedStatement ps =conn.prepareStatement(sql);
             ps.setString(1, p.getNama());
             ps.setInt(2, p.getUmur());
@@ -56,7 +56,7 @@ public class PasienDAO {
         try{
 
             String sql =
-                    "UPDATE pasien SET nama=?,umur=?,gender=?,alamat=?,no_hp=?,tekanan_darah=?,gula_darah=? WHERE id_pasien=?";
+                    "UPDATE pasien SET nama=?,umur=?,gender=?,alamat=?,noHP=?,tekananDarah=?,gulaDarah=? WHERE id=?";
 
             PreparedStatement ps =
                     conn.prepareStatement(sql);
@@ -84,7 +84,7 @@ public class PasienDAO {
         try{
 
             String sql =
-                    "DELETE FROM pasien WHERE id_pasien=?";
+                    "DELETE FROM pasien WHERE id=?";
 
             PreparedStatement ps =
                     conn.prepareStatement(sql);
@@ -121,14 +121,14 @@ public class PasienDAO {
 
                 list.add(
                         new Pasien(
-                                rs.getInt("id_pasien"),
+                                rs.getInt("id"),
                                 rs.getString("nama"),
                                 rs.getInt("umur"),
                                 rs.getString("gender"),
                                 rs.getString("alamat"),
-                                rs.getString("no_hp"),
-                                rs.getDouble("tekanan_darah"),
-                                rs.getDouble("gula_darah")
+                                rs.getString("noHP"),
+                                rs.getDouble("tekananDarah"),
+                                rs.getDouble("gulaDarah")
                         )
                 );
             }
@@ -140,4 +140,24 @@ public class PasienDAO {
 
         return list;
     }
+
+    public int getTotalPasien() {
+    int total = 0;
+    String sql = "SELECT COUNT(*) AS total FROM pasien";
+    
+    try (Connection conn = database.DBConnection.connect();
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+         
+        if (rs.next()) {
+            total = rs.getInt("total");
+        }
+        
+    } catch (Exception e) {
+        System.out.println("Gagal menghitung total pasien: " + e.getMessage());
+        e.printStackTrace();
+    }
+    
+    return total;
+}
 }

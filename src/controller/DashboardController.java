@@ -29,8 +29,18 @@ public class DashboardController {
 
     @FXML
     public void initialize() {
+        // Panggil refreshDashboard saat form pertama kali dimuat
+        refreshDashboard();
+    }
+
+    /**
+     * Method khusus untuk menyegarkan data di Dashboard
+     * Berguna untuk dipanggil ulang setelah menutup form lain
+     */
+    private void refreshDashboard() {
         // 1. Sinkronisasi Card Total Pasien
         if (lblTotalPasien != null) {
+            // Catatan: Jika data ribuan, lebih baik gunakan metode COUNT(*) di DAO
             int total = pasienService.getAll().size();
             lblTotalPasien.setText(String.valueOf(total));
         }
@@ -94,10 +104,14 @@ public class DashboardController {
     @FXML
     private void openPasien() {
         SceneUtil.openMaximizedWindow("/view/pasien.fxml","Data Pasien");
+        // Segarkan data dashboard setelah window Data Pasien ditutup
+        refreshDashboard();
     }
     
     @FXML
     private void openPrediksi() {
         SceneUtil.openMaximizedWindow("/view/prediksi.fxml","Prediksi Diabetes");
+        // Segarkan data dashboard setelah window Prediksi ditutup
+        refreshDashboard();
     }
 }
